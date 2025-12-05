@@ -28,7 +28,6 @@ output_audio_stream = output_container.add_stream(input_audio_stream.codec.name,
 seek_time = int(trim_start_time / input_video_stream.time_base)
 input_container.seek(seek_time, stream=input_video_stream)
 
-
 done: bool = False
 
 for packet in input_container.demux(input_video_stream, input_audio_stream):
