@@ -13,9 +13,10 @@ input_audio_stream = input_container.streams.audio[0]
 # Output
 output_container = av.open(output_file_path, 'w')
 output_audio_stream = output_container.add_stream(input_audio_stream.codec.name, rate=input_audio_stream.rate)
+output_audio_stream.bit_rate = input_audio_stream.bit_rate
 
 desired_start_time = 100
-desired_end_time = 106
+desired_end_time = 150
 
 for frame in input_container.decode(audio=0):
     current_time = float(frame.pts * input_audio_stream.time_base)

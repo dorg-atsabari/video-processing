@@ -4,7 +4,7 @@ import cv2
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-trim_start_time = 60
+trim_start_time = 28
 trim_end_time = 65
 duration = trim_end_time - trim_start_time
 
@@ -13,19 +13,17 @@ output_file_path = './output_combined.mp4'
 
 input_container = av.open(input_file_path)
 output_container = av.open(output_file_path, 'w')
-
+# Input Streams
 input_video_stream = input_container.streams.video[0]
-input_audio_streams = [s for s in input_container.streams if s.type == 'audio']
-
+input_audio_stream = input_container.streams.audio[0]
+# Output Video Stream
 output_video_stream = output_container.add_stream(input_video_stream.codec.name, rate=Fraction(input_video_stream.average_rate))
 output_video_stream.width = input_video_stream.width
 output_video_stream.height = input_video_stream.height
 output_video_stream.pix_fmt = input_video_stream.pix_fmt
+# Output Audio Stream
+output_audio_stream = output_container.add_stream(input_audio_stream.codec.name, rate=input_audio_stream.rate)
 
-output_audio_stream_map = {}
-for input_audio_stream in input_audio_streams:
-    out_stream = output_container.add_stream(input_audio_stream.codec.name, rate=input_audio_stream.rate)
-    output_audio_stream_map[input_audio_stream] = out_stream
 
 seek_time = int(trim_start_time / input_video_stream.time_base)
 input_container.seek(seek_time, stream=input_video_stream)
@@ -33,7 +31,7 @@ input_container.seek(seek_time, stream=input_video_stream)
 
 done: bool = False
 
-for packet in input_container.demux(input_video_stream, *input_audio_streams):
+for packet in input_container.demux(input_video_stream, input_audio_stream):
 
     if done == True:
          break
@@ -63,7 +61,7 @@ for packet in input_container.demux(input_video_stream, *input_audio_streams):
                 (x, y, w, h) = faces[0]
                 if w > 100:
                     cv2.rectangle(frame_img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    cv2.putText(frame_img, f"{w}px", (x,y), cv2.FONT_HERSHEY_COMPLEX, 2, cv2.COLOR_BAYER_BG2BGR, 2, cv2.LINE_4)
+                    cv2.putText(frame_img, f"{w}px", (x,y), cv2.FONT_HERSHEY_PLAIN, 2, cv2.COLOR_BAYER_BG2BGR, 2, cv2.LINE_4)
 
             new_frame = av.VideoFrame.from_ndarray(frame_img, format='bgr24')
 
@@ -79,14 +77,13 @@ for packet in input_container.demux(input_video_stream, *input_audio_streams):
 
         time_sec = packet.pts * packet.stream.time_base if packet.pts is not None else None
         if time_sec is not None and trim_start_time <= time_sec <= trim_end_time:
-            relevant_output_audio_stream = output_audio_stream_map[packet.stream]
             for frame in packet.decode():
                 time_base = frame.time_base
                 if frame.pts is not None:
                     frame.pts = int(frame.pts - trim_start_time / time_base)
                     frame.dts = int(frame.dts - trim_start_time / time_base) if frame.dts is not None else None
 
-                for packet_out in relevant_output_audio_stream.encode(frame):
+                for packet_out in output_audio_stream.encode(frame):
                     output_container.mux(packet_out)
 
 # Flush Video
@@ -94,6 +91,5 @@ for encoded_packet in output_video_stream.encode():
     output_container.mux(encoded_packet)
 
 # Flush Audio
-for output_audio_stream in output_audio_stream_map.values():
-    for packet_out in output_audio_stream.encode():
-        output_container.mux(packet_out)
+for encoded_packet in output_audio_stream.encode():
+    output_container.mux(encoded_packet)
