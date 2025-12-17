@@ -3,7 +3,7 @@
 
 import av
 
-input_file_path = './video-sources/84dYijIpWjQ.mp4'
+input_file_path = 'https://cdn-vl.replay.peech.ai/videos/ee8f42ab-fcde-495b-b914-daad9e4bc435/74e5e861-55f7-4c68-b5c8-a8a027a051e8'
 output_file_path = './output_audio.m4a'
 
 # Input
