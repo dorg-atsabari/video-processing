@@ -8,7 +8,7 @@ trim_start_time = 28
 trim_end_time = 65
 duration = trim_end_time - trim_start_time
 
-input_file_path = './video-sources/84dYijIpWjQ.mp4'
+input_file_path = 'https://cdn-vl.replay.peech.ai/videos/ee8f42ab-fcde-495b-b914-daad9e4bc435/74e5e861-55f7-4c68-b5c8-a8a027a051e8'
 output_file_path = './output_combined.mp4'
 
 input_container = av.open(input_file_path)

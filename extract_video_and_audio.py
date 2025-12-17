@@ -5,7 +5,7 @@ from fractions import Fraction
 trim_start_time = 30
 trim_end_time = 45
 
-input_file_path = './video-sources/84dYijIpWjQ.mp4'
+input_file_path = 'https://cdn-vl.replay.peech.ai/videos/ee8f42ab-fcde-495b-b914-daad9e4bc435/74e5e861-55f7-4c68-b5c8-a8a027a051e8'
 output_video_file_path = './output_video.mp4'
 output_audio_file_path = './output_audio.m4a'
 
