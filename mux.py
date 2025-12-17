@@ -4,8 +4,8 @@ import cv2
 
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-trim_start_time = 28
-trim_end_time = 65
+trim_start_time = 610
+trim_end_time = 625
 duration = trim_end_time - trim_start_time
 
 input_file_path = 'https://cdn-vl.replay.peech.ai/videos/ee8f42ab-fcde-495b-b914-daad9e4bc435/74e5e861-55f7-4c68-b5c8-a8a027a051e8'
@@ -60,7 +60,10 @@ for packet in input_container.demux(input_video_stream, input_audio_stream):
                 (x, y, w, h) = faces[0]
                 if w > 100:
                     cv2.rectangle(frame_img, (x, y), (x+w, y+h), (0, 255, 0), 2)
-                    cv2.putText(frame_img, f"{w}px", (x,y), cv2.FONT_HERSHEY_PLAIN, 2, cv2.COLOR_BAYER_BG2BGR, 2, cv2.LINE_4)
+                    cv2.putText(frame_img, f"X:{x}", (x, y-5), cv2.FONT_HERSHEY_DUPLEX, 1.2, (255, 255, 255), 2, cv2.LINE_4)
+                    cv2.putText(frame_img, f"Y:{y}", (x+w, y-5), cv2.FONT_HERSHEY_DUPLEX, 1.2, (255, 255, 255), 2, cv2.LINE_4)
+                    cv2.putText(frame_img, f"W:{w}", (x + (w//2//2), y - 50), cv2.FONT_HERSHEY_DUPLEX, 1.2, (255, 255, 255), 2, cv2.LINE_4)
+                    cv2.putText(frame_img, f"H:{h}", (x - 150, y + (h//2)), cv2.FONT_HERSHEY_DUPLEX, 1.2, (255, 255, 255), 2, cv2.LINE_4)
 
             new_frame = av.VideoFrame.from_ndarray(frame_img, format='bgr24')
 
