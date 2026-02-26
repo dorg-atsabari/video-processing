@@ -89,3 +89,6 @@ video-sources/
 # Face detector model files
 face_detector/models/*.onnx
 plans/
+
+# Claude local settings (machine-specific)
+.claude/settings.local.json
