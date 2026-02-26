@@ -31,6 +31,8 @@ face  = detector.get_first_face(frame_bgr)        # -> (x, y, w, h) | None
 ### 1. Install Python dependencies
 
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -e ".[dev]"
 ```
 
