@@ -18,6 +18,8 @@ output_audio_stream.bit_rate = input_audio_stream.bit_rate
 desired_start_time = 100
 desired_end_time = 150
 
+input_container.seek(int(desired_start_time / av.time_base))
+
 for frame in input_container.decode(audio=0):
     current_time = float(frame.pts * input_audio_stream.time_base)
     
