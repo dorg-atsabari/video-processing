@@ -1,7 +1,7 @@
 import av
 from fractions import Fraction
 import cv2
-from face_detector import FaceDetector
+from face_detector import create_face_detector
 
 # Configuration
 trim_start_time = 30
@@ -25,7 +25,7 @@ input_file_path = 'https://cdn-vl.replay.peech.ai/videos/ee8f42ab-fcde-495b-b914
 output_file_path = './output_combined.mp4'
 
 # Initialize face detector
-face_detector_instance = FaceDetector()
+face_detector_instance = create_face_detector(backend="yunet")
 
 
 def analyze_face_detections(input_file, start_time, end_time, sample_rate=1):

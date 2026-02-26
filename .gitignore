@@ -85,3 +85,7 @@ video-sources/
 *.mp4
 *.mp3
 *.m4a
+
+# Face detector model files
+face_detector/models/*.onnx
+plans/
